@@ -1,0 +1,43 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        Symfony\Component\Security\Core\User\User: 'bcrypt'
+    role_hierarchy:
+        ROLE_ADMIN:         ROLE_USER
+        ROLE_SUPER_ADMIN:   ROLE_ADMIN
+    providers:
+        in_memory:
+            memory:
+                users:
+                    superadmin:
+                        password: '$2y$13$QcC0vsX7irdftpgnRXfKZOVuDe3vNPR/d4mYcPpPt2nYwzpht5nli'
+                        roles: ['ROLE_SUPER_ADMIN']
+    firewalls:
+        login:
+            pattern:  ^/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern:   ^/
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+            
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/products, roles: ROLE_ADMIN, methods: [POST, PUT] }
+        - { path: ^/orders, roles: [ROLE_ADMIN, ROLE_USER], methods: [GET] }
+        - { path: ^/products, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
+        - { path: ^/orders, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
