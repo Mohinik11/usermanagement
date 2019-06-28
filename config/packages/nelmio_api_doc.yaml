@@ -1,9 +1,46 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
+            title: User Management
             description: This is an awesome app!
             version: 1.0.0
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Value: Bearer {jwt}'
+                name: Authorization
+                in: header
+        security:
+            - Bearer: []
+        paths:
+          /login_check:
+            post:
+              tags:
+                - Login
+              description: Login into the api.
+              produces:
+                - application/json
+              parameters:
+                - name: user
+                  description: User to login
+                  in: body
+                  required: true
+                  schema:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      password:
+                        type: string
+              responses:
+                '200':
+                  description: Login successful
+                  schema:
+                    type: object
+                    properties:
+                      token:
+                        type: string
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/(?!/doc$) # Accepts routes under /api except /api/doc
+
