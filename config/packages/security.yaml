@@ -10,7 +10,7 @@ security:
             memory:
                 users:
                     superadmin:
-                        password: '$2y$13$QcC0vsX7irdftpgnRXfKZOVuDe3vNPR/d4mYcPpPt2nYwzpht5nli'
+                        password: '$2y$13$tesqUYpBdiDaFSMc39LcEOmn5ENsapNF3XZvb5lW2QuWF4LrOzLy.'
                         roles: ['ROLE_SUPER_ADMIN']
     firewalls:
         login:
